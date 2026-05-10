@@ -26,4 +26,4 @@ XGB_SEARCH_SPACE = {
     "gamma": (0, 5, 0.1),
 }
 
-TABPFN_N_ESTIMATORS = 8
+TABPFN_N_ESTIMATORS = 1

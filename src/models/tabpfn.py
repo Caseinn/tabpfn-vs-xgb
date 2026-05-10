@@ -18,7 +18,7 @@ def build_vanilla() -> TabPFNClassifier:
         n_estimators=TABPFN_N_ESTIMATORS,
         device="cuda",
         random_state=RANDOM_STATE,
-        fit_mode="fit_with_cache",
+        fit_mode="fit_preprocessors",
         memory_saving_mode="balanced",
         n_preprocessing_jobs=-1,
     )
@@ -35,7 +35,7 @@ def build_balanced() -> TabPFNClassifier:
         n_estimators=TABPFN_N_ESTIMATORS,
         device="cuda",
         random_state=RANDOM_STATE,
-        fit_mode="fit_with_cache",
+        fit_mode="ffit_preprocessors",
         balance_probabilities=True,
         memory_saving_mode="balanced",
         n_preprocessing_jobs=-1,
