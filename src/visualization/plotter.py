@@ -11,9 +11,11 @@ CLASS_NAMES = ["No Diabetes", "Diabetes"]
 from src.utils.config import OUTPUT_DIR
 
 
-def _ensure_dir() -> None:
-    """Ensure output directory exists."""
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+def _ensure_dir(output_dir: Path | None = None) -> Path:
+    """Ensure output directory exists and return it."""
+    d = output_dir or OUTPUT_DIR
+    d.mkdir(parents=True, exist_ok=True)
+    return d
 
 
 def plot_confusion_matrix(
@@ -78,16 +80,17 @@ def plot_classification_report(
     print(f"  Saved: {filepath}")
 
 
-def save_fold_plots(store: dict, n_splits: int) -> None:
+def save_fold_plots(store: dict, n_splits: int, output_dir: Path | None = None) -> None:
     """Save per-fold confusion matrix and report plots.
 
     Args:
         store: Results dictionary from run_cv.
         n_splits: Number of folds.
+        output_dir: Output directory (defaults to OUTPUT_DIR).
     """
-    _ensure_dir()
+    out = _ensure_dir(output_dir)
     print(f"\n{'=' * 60}")
-    print("SAVING PLOTS TO output/")
+    print(f"SAVING PLOTS TO {out}/")
     print(f"{'=' * 60}")
     for i in range(n_splits):
         for label, key in [("xgb", "xgb"), ("tabpfn", "tabpfn")]:
@@ -95,23 +98,24 @@ def save_fold_plots(store: dict, n_splits: int) -> None:
             plot_confusion_matrix(
                 store[key]["trues"][i], store[key]["preds"][i],
                 f"{label.upper()} - Fold {i + 1} Confusion Matrix",
-                OUTPUT_DIR / f"{prefix}_cm.png",
+                out / f"{prefix}_cm.png",
             )
             plot_classification_report(
                 store[key]["trues"][i], store[key]["preds"][i],
                 f"{label.upper()} - Fold {i + 1} Classification Report",
-                OUTPUT_DIR / f"{prefix}_report.png",
+                out / f"{prefix}_report.png",
             )
 
 
-def save_aggregate_plots(store: dict, n_splits: int) -> None:
+def save_aggregate_plots(store: dict, n_splits: int, output_dir: Path | None = None) -> None:
     """Save aggregate plots across all folds.
 
     Args:
         store: Results dictionary from run_cv.
         n_splits: Number of folds.
+        output_dir: Output directory (defaults to OUTPUT_DIR).
     """
-    _ensure_dir()
+    out = _ensure_dir(output_dir)
     all_trues_xgb = np.concatenate(store["xgb"]["trues"])
     all_preds_xgb = np.concatenate(store["xgb"]["preds"])
     all_trues_tabpfn = np.concatenate(store["tabpfn"]["trues"])
@@ -124,10 +128,10 @@ def save_aggregate_plots(store: dict, n_splits: int) -> None:
         plot_confusion_matrix(
             trues, preds,
             f"{label.upper()} - All Folds Confusion Matrix",
-            OUTPUT_DIR / f"{label}_aggregate_cm.png",
+            out / f"{label}_aggregate_cm.png",
         )
         plot_classification_report(
             trues, preds,
             f"{label.upper()} - All Folds Classification Report",
-            OUTPUT_DIR / f"{label}_aggregate_report.png",
+            out / f"{label}_aggregate_report.png",
         )

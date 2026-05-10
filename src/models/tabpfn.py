@@ -20,6 +20,7 @@ def build_vanilla() -> TabPFNClassifier:
         random_state=RANDOM_STATE,
         fit_mode="fit_preprocessors",
         memory_saving_mode="balanced",
+        n_preprocessing_jobs=-1,
     )
 
 
@@ -37,23 +38,7 @@ def build_balanced() -> TabPFNClassifier:
         fit_mode="fit_preprocessors",
         balance_probabilities=True,
         memory_saving_mode="balanced",
-    )
-
-
-def build_tuned() -> TabPFNClassifier:
-    """Build TabPFN v2.5 with balanced probabilities.
-
-    Returns:
-        Configured TabPFNClassifier.
-    """
-    return TabPFNClassifier.create_default_for_version(
-        ModelVersion.V2_5,
-        n_estimators=TABPFN_N_ESTIMATORS,
-        device="cuda",
-        random_state=RANDOM_STATE,
-        fit_mode="fit_preprocessors",
-        balance_probabilities=True,
-        memory_saving_mode="balanced",
+        n_preprocessing_jobs=-1,
     )
 
 
