@@ -1,8 +1,10 @@
+import re
 import sys
 from pathlib import Path
 from rich.console import Console
-from rich.text import Text
 from typing import IO
+
+ANSI_RE = re.compile(r"\x1b\[[0-9;]*m")
 
 
 class OutputLogger:
@@ -12,12 +14,11 @@ class OutputLogger:
         self.filepath = filepath
         self.filepath.parent.mkdir(parents=True, exist_ok=True)
         self._file: IO[str] = open(self.filepath, "w", encoding="utf-8")
-        self._buffer = []
 
     def write(self, text: str) -> None:
         sys.__stdout__.write(text)
         sys.__stdout__.flush()
-        self._file.write(text)
+        self._file.write(ANSI_RE.sub("", text))
         self._file.flush()
 
     def flush(self) -> None:

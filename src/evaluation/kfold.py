@@ -35,7 +35,7 @@ def run_cv(X: np.ndarray, y: np.ndarray, model_xgb, model_tabpfn, n_splits: int 
     console.print(f"[bold magenta]{n_splits}-FOLD CROSS-VALIDATION[/bold magenta]")
     console.print(f"{'=' * 60}")
 
-    print(f"\nWarming up GPU context...", end=" ", flush=True)
+    print(f"\nWarming up GPU (XGBoost + TabPFN)...", end=" ", flush=True)
     import copy
     xgb_warm = copy.deepcopy(model_xgb)
     tabpfn_warm = copy.deepcopy(model_tabpfn)

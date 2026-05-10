@@ -4,9 +4,9 @@ BASE_DIR = Path(__file__).parent.parent.parent
 DATA_PATH = BASE_DIR / "data" / "diabetes_binary_health_indicators_BRFSS2015.csv"
 OUTPUT_DIR = BASE_DIR / "output"
 
-def get_mode_output_dir(mode: str) -> Path:
-    """Get output directory for a specific mode."""
-    return OUTPUT_DIR / mode
+def get_mode_output_dir(sample_size: int, mode: str) -> Path:
+    """Get output directory for a specific sample size and mode."""
+    return OUTPUT_DIR / str(sample_size) / mode
 
 TARGET_COLUMN = "Diabetes_binary"
 SAMPLE_SIZE = 50_000

@@ -39,7 +39,7 @@ def run(mode: str = "vanilla", sample_size: int | None = None, n_trials: int | N
     modes = ["vanilla", "balanced", "tuned"] if mode == "all" else [mode]
 
     for current_mode in modes:
-        output_dir = get_mode_output_dir(current_mode)
+        output_dir = get_mode_output_dir(sample_size or SAMPLE_SIZE, current_mode)
         output_dir.mkdir(parents=True, exist_ok=True)
 
         log_path = output_dir / "output.log"
