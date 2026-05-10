@@ -43,6 +43,15 @@ def run_cv(X: np.ndarray, y: np.ndarray, model_xgb, model_tabpfn, n_splits: int 
     tabpfn_warm.fit(X[:100], y[:100])
     console.print("[green]done[/green]")
 
+    print(f"Warming up CPU (XGBoost + TabPFN)...", end=" ", flush=True)
+    xgb_warm_cpu = copy.deepcopy(model_xgb)
+    xgb_warm_cpu.set_params(device="cpu", predictor="cpu_predictor")
+    xgb_warm_cpu.fit(X[:100], y[:100])
+    tabpfn_warm_cpu = copy.deepcopy(model_tabpfn)
+    tabpfn_warm_cpu.set_params(device="cpu")
+    tabpfn_warm_cpu.fit(X[:100], y[:100])
+    console.print("[green]done[/green]")
+
     for fold, (train_idx, test_idx) in enumerate(skf.split(X, y), 1):
         X_train, X_test = X[train_idx], X[test_idx]
         y_train, y_test = y[train_idx], y[test_idx]
